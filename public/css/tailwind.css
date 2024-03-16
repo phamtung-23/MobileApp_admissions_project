@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root{
+  overflow-x: hidden;
+}
+.swiper {
+  width: 90%;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.swiper-slide {
+  background-position: center;
+  background-size: cover;
+  width: 250px;
+  padding-left: 10px;
+  padding-right: 10px;
+  object-fit: cover;
+  box-shadow: none !important;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  border-radius: 20px;
+  object-fit: cover;
+}
+.react-pdf__Document{
+  width: 80% !important;
+}
+.react-pdf__Page{
+  width: 100% !important;
+}
+.react-pdf__Page__canvas{
+  width: 100% !important;
+  height: max-content !important;
+}
+
+.MuiStack-root{
+  width: 100% !important;
+}
+
+.cl-userProfile-root{
+  width: 100% !important;
+  display: flex;
+  justify-content: center;
+}
+.cl-card{
+  width: 60%;
+}
