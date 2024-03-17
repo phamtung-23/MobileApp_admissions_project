@@ -31,7 +31,7 @@ import { MdOutlineLocationSearching } from "react-icons/md";
 import { FaRobot } from "react-icons/fa";
 import useFetch from "@/hooks/useFetch";
 import { useUser, SignedIn, SignInButton } from "@clerk/clerk-react";
-import { callAPI, callAPIChatPdf, callAPIChatPdfFlowise } from "@/api/openAI";
+import { callAPI, callAPIChatPdf, callAPIChatPdfDTT, callAPIChatPdfDVH, callAPIChatPdfDVL, callAPIChatPdfFlowise, callAPIChatPdfQSB } from "@/api/openAI";
 import { MdDelete } from "react-icons/md";
 
 
@@ -53,7 +53,7 @@ const TextTypeWriter = ({ content, setOnRequest }) => {
       
     },
     typeSpeed: 10,
-    delaySpeed: 100,
+    delaySpeed: 10,
     onType:()=>{
       // Scroll to end when typewriter completes
       const chatWrapper = document.getElementById("chat-wrapper");
@@ -88,8 +88,8 @@ const Chat = () => {
   const [ searchInputName, setSearchInputName ] = useState('')
   let url = `http://localhost:3300/api/university?q=${searchInputName}`;
   const {data, loading, error, reFetch} = useFetch(url)
-  const [ nameHeaderChat, setNameHeaderChat] = useState("AI Chat GPT")
-  const [ iconHeaderChat, setIconHeaderChat] = useState("img/iconChatGPT.png")
+  const [ nameHeaderChat, setNameHeaderChat] = useState("Chat Assistant")
+  const [ iconHeaderChat, setIconHeaderChat] = useState("img/chatPDF.png")
   const { state } = useLocation();
   
   // console.log(state)
@@ -225,19 +225,73 @@ const Chat = () => {
         // save message in db
         saveMessPDF(user.id, {role: 'user', content: question.trim()}, typeChat)
         // scroll end
-        // updateScrollView()
-        callAPIChatPdf(question.trim()).then((response)=>{
-          if(response.success){
-            // console.log(response.data.data)
-            saveMessPDF(user.id, response.data.data, typeChat)
-            newMessage.push(response.data.data)
-            setMessages([...newMessage])
-            // updateScrollView()
-            setQuestion('')
-          }else{
-            Alert.alert('Error', response.msg)
-          }
-        })
+        // updateScrollView() 
+        if (typeChat == "DTT"){
+          callAPIChatPdfDTT(question.trim()).then((response)=>{
+            if(response.success){
+              // console.log(response.data)
+              saveMessPDF(user.id, response.data, typeChat)
+              newMessage.push(response.data)
+              setMessages([...newMessage])
+              // updateScrollView()
+              setQuestion('')
+            }else{
+              Alert.alert('Error', response.msg)
+            }
+          })
+        }else if (typeChat == "DVH"){
+          callAPIChatPdfDVH(question.trim()).then((response)=>{
+            if(response.success){
+              // console.log(response.data)
+              saveMessPDF(user.id, response.data, typeChat)
+              newMessage.push(response.data)
+              setMessages([...newMessage])
+              // updateScrollView()
+              setQuestion('')
+            }else{
+              Alert.alert('Error', response.msg)
+            }
+          })
+        }else if (typeChat == "QSB"){
+          callAPIChatPdfQSB(question.trim()).then((response)=>{
+            if(response.success){
+              // console.log(response.data)
+              saveMessPDF(user.id, response.data, typeChat)
+              newMessage.push(response.data)
+              setMessages([...newMessage])
+              // updateScrollView()
+              setQuestion('')
+            }else{
+              Alert.alert('Error', response.msg)
+            }
+          })
+        }else if (typeChat == "DVL"){
+          callAPIChatPdfDVL(question.trim()).then((response)=>{
+            if(response.success){
+              // console.log(response.data)
+              saveMessPDF(user.id, response.data, typeChat)
+              newMessage.push(response.data)
+              setMessages([...newMessage])
+              // updateScrollView()
+              setQuestion('')
+            }else{
+              Alert.alert('Error', response.msg)
+            }
+          })
+        }else{
+          callAPIChatPdf(question.trim()).then((response)=>{
+            if(response.success){
+              // console.log(response.data.data)
+              saveMessPDF(user.id, response.data.data, typeChat)
+              newMessage.push(response.data.data)
+              setMessages([...newMessage])
+              // updateScrollView()
+              setQuestion('')
+            }else{
+              Alert.alert('Error', response.msg)
+            }
+          })
+        }
       }
     }
   }
@@ -318,31 +372,36 @@ const Chat = () => {
 
                       <Card className="w-full relative max-h-[450px] overflow-auto">
                         <List className="">
-                          <ListItem onClick={()=>{handleClick('AI Chat Assistant','gpt', 'img/iconChatGPT.png')}}>
+                          <ListItem onClick={()=>{handleClick('Chat Assistant','gpt', 'img/chatPDF.png')}}>
                             <ListItemPrefix>
-                              <Avatar variant="circular" alt="candice" src="img/iconChatGPT.png" />
+                              <Avatar alt="avatar" size="sm" src="img/chatPDF.png" />
                             </ListItemPrefix>
                             <div>
                               <Typography variant="h6" color="blue-gray">
-                              AI chat Assistant
+                              Chat Assistant
                               </Typography>
-                              
+                              <Typography variant="small" color="gray" className="font-normal">
+                                Chat with AI GPT
+                              </Typography>
                             </div>
                           </ListItem>
-                          <ListItem onClick={()=>{handleClick('All University', 'all', 'img/chatPDF.png')}}>
+                          {/* <ListItem onClick={()=>{handleClick('All University', 'all', 'img/chatPDF.png')}}>
                             <ListItemPrefix>
-                              <Avatar variant="circular" alt="alexander" src="img/chatPDF.png" />
+                              <Avatar alt="avatar" size="sm" src="img/chatPDF.png" />
                             </ListItemPrefix>
                             <div>
                               <Typography variant="h6" color="blue-gray">
-                              All PDF University
+                              All University
+                              </Typography>
+                              <Typography variant="small" color="gray" className="font-normal">
+                                Chat with all info university
                               </Typography>
                             </div>
-                          </ListItem>
+                          </ListItem> */}
                           {data.map((university) => (
                             <ListItem key={university.code} onClick={()=>{handleClick(university.name.vi, university.code, university.icon)}}>
                               <ListItemPrefix>
-                                <Avatar variant="circular" alt="emma" src={university.icon} />
+                                <Avatar alt="avatar" size="sm" src={university.icon} />
                               </ListItemPrefix>
                               <div>
                                 <Typography variant="h6" color="blue-gray">
